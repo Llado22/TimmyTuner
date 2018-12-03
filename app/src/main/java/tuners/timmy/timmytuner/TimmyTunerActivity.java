@@ -15,11 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
 
 
 public class TimmyTunerActivity extends AppCompatActivity {
@@ -67,15 +63,8 @@ public class TimmyTunerActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        //TextView note = findViewById(R.id.note);
-        //SoundMeter sm = new SoundMeter();
-        //sm.start();
-        //Double ampl= sm.getAmplitude();
-        //String amp = ampl.toString();
-        //String amp = "hola";
-        //note.setText(amp);
-    }
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -169,5 +158,4 @@ public class TimmyTunerActivity extends AppCompatActivity {
             return 3;
         }
     }
-
 }

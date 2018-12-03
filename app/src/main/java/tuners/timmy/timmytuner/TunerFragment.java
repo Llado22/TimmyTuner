@@ -20,7 +20,14 @@ public class TunerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_tuner, container, false);
+        
+        //sm.start();
+        //Double ampl= sm.getAmplitude();
+        //String amp = ampl.toString();
+        //String amp = "hola";
+        //note.setText(amp);
     }
+
 
 }
 

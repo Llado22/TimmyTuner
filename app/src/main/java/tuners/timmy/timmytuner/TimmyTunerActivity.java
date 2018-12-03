@@ -5,7 +5,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,8 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.EditText;
 import android.widget.TextView;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
+
 
 public class TimmyTunerActivity extends AppCompatActivity {
 
@@ -64,7 +67,13 @@ public class TimmyTunerActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
+        //TextView note = findViewById(R.id.note);
+        //SoundMeter sm = new SoundMeter();
+        //sm.start();
+        //Double ampl= sm.getAmplitude();
+        //String amp = ampl.toString();
+        //String amp = "hola";
+        //note.setText(amp);
     }
 
 
@@ -139,7 +148,19 @@ public class TimmyTunerActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            //return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    return new MetroFragment();
+                case 1:
+                    return new TunerFragment();
+                    //return PlaceholderFragment.newInstance(1);
+                case 2:
+                    //return PlaceholderFragment.newInstance(2);
+                    return new ChordsFragment();
+                default:
+                    return null;
+            }
         }
 
         @Override
@@ -148,4 +169,5 @@ public class TimmyTunerActivity extends AppCompatActivity {
             return 3;
         }
     }
+
 }

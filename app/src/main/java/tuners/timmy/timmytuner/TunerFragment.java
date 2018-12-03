@@ -19,13 +19,18 @@ public class TunerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tuner, container, false);
-        
-        //sm.start();
-        //Double ampl= sm.getAmplitude();
-        //String amp = ampl.toString();
-        //String amp = "hola";
-        //note.setText(amp);
+        View view = inflater.inflate(R.layout.fragment_tuner, container, false);
+        TextView note = view.findViewById(R.id.note);
+        /*
+        FICAR AQUÍ EL START RECORDING
+        SoundMeter sm = new SoundMeter();
+        sm.start();
+        Double ampl= sm.getAmplitude();
+        String amp = ampl.toString();
+        note.setText(amp);
+        */
+        return view;
+
     }
 
 

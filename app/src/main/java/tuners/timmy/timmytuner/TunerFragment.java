@@ -1,20 +1,22 @@
 package tuners.timmy.timmytuner;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
+import android.widget.Button;
 import android.widget.TextView;
 
 
 public class TunerFragment extends Fragment {
+
+    public SoundMeter sm;
+
+    private Button btn_record;
+    private TextView note;
+    private Button btn_stop;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -32,6 +34,19 @@ public class TunerFragment extends Fragment {
         return view;
 
     }
+
+    public void onRecord() {
+        Double amplitude = sm.getAmplitude();
+        String amp = amplitude.toString();
+        note.setText(amp);
+
+    }
+
+    public void onStopRecording() {
+        sm.stop();
+    }
+
+
 
 
 }

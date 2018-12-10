@@ -1,8 +1,12 @@
 package tuners.timmy.timmytuner;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
@@ -16,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class TimmyTunerActivity extends AppCompatActivity {
@@ -34,6 +39,7 @@ public class TimmyTunerActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    static final Integer MICROPHONE_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +70,8 @@ public class TimmyTunerActivity extends AppCompatActivity {
             }
         });
 
-
+        // Demanem permisos al usuari només entrar
+        askForPermission(Manifest.permission.RECORD_AUDIO, MICROPHONE_REQUEST);
     }
 
     @Override
@@ -159,4 +166,60 @@ public class TimmyTunerActivity extends AppCompatActivity {
             return 3;
         }
     }
+
+
+    private void askForPermission(String permission, Integer requestCode) {
+
+        if(ContextCompat.checkSelfPermission(TimmyTunerActivity.this,
+                permission) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(TimmyTunerActivity.this,
+                    permission)) {
+                ActivityCompat.requestPermissions(TimmyTunerActivity.this,
+                        new String[]{permission},
+                        requestCode);
+            } else {
+                ActivityCompat.requestPermissions(TimmyTunerActivity.this,
+                        new String[]{permission},
+                        requestCode);
+            }
+        } else {
+            Toast.makeText(this, "" + permission + "is already granted.",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED) {
+            switch(requestCode) {
+                case 1:
+                    // If request is cancelled, the result arrays are empty.
+                    if (grantResults.length > 0
+                            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                        // permission was granted, yay! Do the
+                        // contacts-related task you need to do.
+                        Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+
+                    } else {
+
+                        // permission denied, boo! Disable the
+                        // functionality that depends on this permission.
+                        Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    }
+                    return;
+
+            }
+        } else {
+            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+        }
+
+    };
 }

@@ -22,17 +22,28 @@ public class TunerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tuner, container, false);
-        TextView note = view.findViewById(R.id.note);
-        /*
-        FICAR AQUÍ EL START RECORDING
-        SoundMeter sm = new SoundMeter();
-        sm.start();
-        Double ampl= sm.getAmplitude();
-        String amp = ampl.toString();
-        note.setText(amp);
-        */
-        return view;
+        note = view.findViewById(R.id.textView);
 
+        btn_record = view.findViewById(R.id.button);
+        btn_stop = view.findViewById(R.id.button2);
+
+        btn_record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRecord();
+            }
+        });
+
+        btn_stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onStopRecording();
+            }
+        });
+
+        sm = new SoundMeter();
+        sm.start();
+        return view;
     }
 
     public void onRecord() {

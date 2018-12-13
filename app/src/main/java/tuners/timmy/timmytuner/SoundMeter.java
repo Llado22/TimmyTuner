@@ -5,6 +5,7 @@ import android.media.MediaRecorder;
 
 class SoundMeter {
 
+
     private AudioRecord ar = null;
     private int minSize;
 
@@ -33,5 +34,4 @@ class SoundMeter {
         }
         return max;
     }
-
 }

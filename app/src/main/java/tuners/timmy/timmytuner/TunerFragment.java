@@ -31,6 +31,18 @@ public class TunerFragment extends Fragment {
 
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("ERROR", "Crida al onStart()");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("ERROR", "Crida al onStop()");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -40,7 +52,7 @@ public class TunerFragment extends Fragment {
         btn_record = view.findViewById(R.id.button);
         btn_stop = view.findViewById(R.id.button2);
 
-        mRecordingThread = new RecordingThread(new AudioDataReceivedListener() {
+        mRecordingThread = new RecordingThread(new RecordingThread.Listener() {
             @Override
             public void onAudioDataReceived(short[] data) {
                 showAmplitude(data);
@@ -76,9 +88,14 @@ public class TunerFragment extends Fragment {
                 max = Math.abs(s);
             }
         }
-        String amp = String.valueOf(max);
+        final String amp = String.valueOf(max);
         try {
-            note.setText(amp);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    note.setText(amp);
+                }
+            });
         } catch (Exception e) {
             Log.e("ERROR", "En setText");
         }

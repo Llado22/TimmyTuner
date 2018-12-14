@@ -7,15 +7,20 @@ import android.util.Log;
 
 
 public class RecordingThread {
+
+    public interface Listener {
+        void onAudioDataReceived(short[] data);
+    }
+
     private static final String LOG_TAG = RecordingThread.class.getSimpleName();
     private static final int SAMPLE_RATE = 16000;
 
-    public RecordingThread(AudioDataReceivedListener listener) {
+    public RecordingThread(Listener listener) {
         mListener = listener;
     }
 
     private boolean mShouldContinue; //para el bucle while de lectura audio
-    private AudioDataReceivedListener mListener;
+    private Listener mListener;
     private Thread mThread;
 
     public boolean recording() {

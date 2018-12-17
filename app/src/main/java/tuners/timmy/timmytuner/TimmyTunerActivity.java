@@ -61,6 +61,23 @@ public class TimmyTunerActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+
+
+
+
+
+
+        //Listener que permet detectar el canvi de pagina:
+        // Quan detectem canvi de pagina cridem enviem les dades al fragment i ja analitza si cal fer startRecording() o stopRecording()
+        // Cal fer intents per comunicar les dues activitats, li passem el fragment en el que estavem i al que anem (el index).
+        // Mirar les funcions per detectar el canvi de pagina, per exemple:
+        //mViewPager.addOnPageChangeListener();
+
+
+
+
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +153,8 @@ public class TimmyTunerActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);

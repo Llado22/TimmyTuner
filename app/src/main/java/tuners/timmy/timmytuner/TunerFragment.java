@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class TunerFragment extends Fragment {
@@ -26,7 +27,6 @@ public class TunerFragment extends Fragment {
     private int bufferSize;
     private int SAMPLE_RATE = 16000;
     private String LOG_TAG = "Tuner";
-    private int max;
     private RecordingThread mRecordingThread;
 
 
@@ -35,6 +35,16 @@ public class TunerFragment extends Fragment {
         super.onStart();
         Log.e("ERROR", "Crida al onStart()");
     }
+
+
+
+
+
+
+    // Fer que quan s'executa el onStop() s'apagui el micro!!!!!
+
+
+
 
     @Override
     public void onStop() {
@@ -54,8 +64,18 @@ public class TunerFragment extends Fragment {
 
         mRecordingThread = new RecordingThread(new RecordingThread.Listener() {
             @Override
-            public void onAudioDataReceived(short[] data) {
-                showAmplitude(data);
+            public void onAudioDataReceived(float max) {
+                final String amp = String.valueOf(max);
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            note.setText(amp);
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("ERROR", "En setText");
+                }
             }
         });
 
@@ -76,54 +96,11 @@ public class TunerFragment extends Fragment {
             }
         });
 
+
+        Toast.makeText(getActivity(), "Estem en l'on create", Toast.LENGTH_SHORT).show();
         return view;
     }
 
-    public void showAmplitude(short[] data) {
-        max = 0;
-        for (short s : data)
-        {
-            if (Math.abs(s) > max)
-            {
-                max = Math.abs(s);
-            }
-        }
-        final String amp = String.valueOf(max);
-        try {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    note.setText(amp);
-                }
-            });
-        } catch (Exception e) {
-            Log.e("ERROR", "En setText");
-        }
-    }
-
-    public void onRecord() {
-        /*ar.startRecording();
-        short[] audioBuffer = new short[bufferSize / 2];
-        long shortsRead = 0;
-        while (ContinueRecording) {
-
-            int numberOfShort = ar.read(audioBuffer, 0, audioBuffer.length);
-            shortsRead += numberOfShort;
-
-            // Do something with the audioBuffer
-            int max = 0;
-            for (short s : audioBuffer) {
-                if (Math.abs(s) > max)
-                {
-                    max = Math.abs(s);
-                }
-            }
-            String amp = String.valueOf(max);
-            note.setText(amp);
-        }
-        */
-
-    }
 
     public void onStopRecording() {
         note.setText("STOP");

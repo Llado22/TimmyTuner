@@ -16,6 +16,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import be.tarsos.dsp.pitch.PitchDetectionHandler;
+import be.tarsos.dsp.pitch.PitchDetectionResult;
+import be.tarsos.dsp.pitch.PitchProcessor;
+import be.tarsos.dsp.AudioDispatcher;
 
 public class TunerFragment extends Fragment {
 
@@ -37,14 +41,7 @@ public class TunerFragment extends Fragment {
     }
 
 
-
-
-
-
     // Fer que quan s'executa el onStop() s'apagui el micro!!!!!
-
-
-
 
     @Override
     public void onStop() {
@@ -61,6 +58,7 @@ public class TunerFragment extends Fragment {
         note = view.findViewById(R.id.textView);
         btn_record = view.findViewById(R.id.button);
         btn_stop = view.findViewById(R.id.button2);
+
 
         mRecordingThread = new RecordingThread(new RecordingThread.Listener() {
             @Override
@@ -99,6 +97,7 @@ public class TunerFragment extends Fragment {
 
         Toast.makeText(getActivity(), "Estem en l'on create", Toast.LENGTH_SHORT).show();
         return view;
+
     }
 
 

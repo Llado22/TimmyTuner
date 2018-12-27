@@ -1,13 +1,8 @@
 package tuners.timmy.timmytuner;
 
-import android.content.pm.PackageManager;
-import android.media.AudioFormat;
 import android.media.AudioRecord;
-import android.media.MediaRecorder;
-import android.media.tv.TvRecordingClient;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +29,23 @@ public class TunerFragment extends Fragment {
     private int bufferSize;
     private int SAMPLE_RATE = 16000;
     private String LOG_TAG = "Tuner";
-    private RecordingThread mRecordingThread;
+
+    RecordingThread recordingThread = new RecordingThread(new RecordingThread.Listener() {
+        @Override
+        public void onAudioDataReceived(float max) {
+            final String amp = String.format("%.2f", max);
+            try {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        note.setText(amp);
+                    }
+                });
+            } catch (Exception e) {
+                Log.e("ERROR", "En setText");
+            }
+        }
+    });
 
     private Button btn_a;
     private Button btn_g;
@@ -123,37 +134,17 @@ public class TunerFragment extends Fragment {
             }
         });
 
-        mRecordingThread = new RecordingThread(new RecordingThread.Listener() {
-            @Override
-            public void onAudioDataReceived(float max) {
-                final String amp = String.valueOf(max);
-                try {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            note.setText(amp);
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e("ERROR", "En setText");
-                }
-            }
-        });
-
         btn_record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!mRecordingThread.recording()) {
-                    mRecordingThread.startRecording();
-                } else {
-                    mRecordingThread.stopRecording();
-                }
+                startRecording();
             }
         });
+
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onStopRecording();
+                stopRecording();
             }
         });
 
@@ -206,11 +197,16 @@ public class TunerFragment extends Fragment {
     }
 
 
-
-    public void onStopRecording() {
-        note.setText("STOP");
+    public void startRecording() {
+        if (!recordingThread.isRecording()) {
+            recordingThread.startRecording();
+        }
     }
 
-
+    public void stopRecording() {
+        if (recordingThread.isRecording()) {
+            recordingThread.stopRecording();
+        }
+    }
 }
 

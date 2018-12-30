@@ -8,7 +8,6 @@ import java.util.Arrays;
 
 public class RecordingThread {
 
-
     public interface Listener {
         void onAudioDataReceived(float max);
     }

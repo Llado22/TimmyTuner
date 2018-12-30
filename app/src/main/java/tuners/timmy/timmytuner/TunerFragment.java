@@ -198,13 +198,13 @@ public class TunerFragment extends Fragment {
 
 
     public void startRecording() {
-        if (!recordingThread.isRecording()) {
+        if (!recordingThread.recording()) {
             recordingThread.startRecording();
         }
     }
 
     public void stopRecording() {
-        if (recordingThread.isRecording()) {
+        if (recordingThread.recording()) {
             recordingThread.stopRecording();
         }
     }

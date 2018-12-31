@@ -122,7 +122,6 @@ public class RecordingThread {
             final float betterTau = parabolicInterpolation(tauEstimate);
 
             // step 6
-            // TODO Implement optimization for the AUBIO_YIN algorithm.
             // 0.77% => 0.5% error rate,
             // using the data of the YIN paper
             // bestLocalEstimate()

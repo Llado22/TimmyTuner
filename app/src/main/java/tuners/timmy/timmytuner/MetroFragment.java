@@ -1,22 +1,17 @@
 package tuners.timmy.timmytuner;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.media.AudioAttributes;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.VibrationEffect;
-import android.support.annotation.RequiresApi;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,20 +21,29 @@ import android.media.SoundPool;
 
 public class MetroFragment extends Fragment implements View.OnClickListener {
 
-    //audio
-    private SoundPool mSoundPool;
-    private Handler handler;
     private int mBeatSoundId = -1;
-    private Runnable mBeatRunnable;
-    private long interval = 500;
-    private int bpm;
+    private static long interval = 500;
+    private int bpm = 120;
 
     public TextView tempo_view;
     private SeekBar tempo_selector;
-    private Button play_btn;
+    private ImageView play_img;
     private Button minustempo;
     private Button plustempo;
-    private boolean isPlaying;
+    private boolean isPlaying = false;
+
+    //audio
+    private SoundPool mSoundPool;
+
+    //HANDLER
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage (Message msg){
+            super.handleMessage(msg);
+            PlayBeat play = (PlayBeat) msg.obj;
+            if(msg.what == 1){ Toast.makeText(getActivity(), "Tick", Toast.LENGTH_SHORT).show();}
+        }
+    };
 
 
     @Override
@@ -49,40 +53,33 @@ public class MetroFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_metro, container, false);
 
+        //REFERENCIES
         tempo_view = view.findViewById(R.id.tempo_view);
         tempo_selector = view.findViewById(R.id.tempo_selector);
-        play_btn = view.findViewById(R.id.play_btn);
         plustempo = view.findViewById(R.id.plustempo);
         minustempo = view.findViewById(R.id.minustempo);
-        play_btn.setOnClickListener(this);
+        play_img = view.findViewById(R.id.play_img);
+        play_img.setOnClickListener(this);
         plustempo.setOnClickListener(this);
         minustempo.setOnClickListener(this);
 
-        // para inicializar el soundpool según la versión de sdk
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mSoundPool = new SoundPool.Builder()
-                    .setMaxStreams(1)
-                    .setAudioAttributes(new AudioAttributes.Builder()
-                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                            .build())
-                    .build();
-        } else mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        //AUDIO
+        //per inicialitzar soundpool segons versió
+        interval = toInterval(bpm);
 
-        //cárrega del beat
-        mBeatSoundId = mSoundPool.load(getActivity(), R.raw.beat, 1);
-        bpm = toBpm(interval);
+        //build SoundPool
+        initializeSP();
 
-        //inici handler
-        handler = new Handler();
-
-        //seek bar
-        tempo_view.setText("120");
+        //SEEKBAR
+        tempo_view.setText(String.valueOf(bpm));
         tempo_selector.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChangedValue = 0;
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 progressChangedValue = progress;
+                bpm = progress;
+                interval = toInterval(bpm);
                 String sprogressChangedValue = String.valueOf(progressChangedValue);
                 tempo_view.setText(sprogressChangedValue);
             }
@@ -100,30 +97,71 @@ public class MetroFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    public void initializeSP (){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mSoundPool = new SoundPool.Builder()
+                    .setMaxStreams(1)
+                    .setAudioAttributes(new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build())
+                    .build();
+        } else mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+    }
     //si l'interval està en ms, en un compas 4/4 tenim 120 BPM, amb la longitud de 0.5 segons per beat -> 500 mspb * 60000 = 120 bpm
-    private int toBpm(long interval) {
+    public int toBpm(long interval) {
         return (int) (60000 / interval);
     }
 
-    private static long toInterval(int bpm) {
+    static public long toInterval(int bpm) {
         return (long) 60000 / bpm;
     }
 
-    public void setBeatRunnable(Runnable beatRunnable) {
-        mBeatRunnable = beatRunnable;
-    }
+    public class PlayBeat {
+        Handler handler;
 
-    class PlayBeat implements Runnable {
-        @Override
-        public void run() {
+        public PlayBeat(Handler handler) {this.handler = handler;}
 
-            //handler.postDelayed((Runnable) getActivity(), interval);
-            if (mSoundPool != null && mBeatSoundId != -1) {
-                mSoundPool.play(mBeatSoundId, 1.0f /*leftVolume*/, 1.0f /*rightVolume*/, 0 /*priority*/, 0 /*loop*/, 1.0f /*rate*/);
-            }
+        public void updateStatus(int status){
+            Message msg = handler.obtainMessage(status, this);
+            handler.sendMessage(msg);
+        }
+
+        public void play(){
+            new Thread(new playRunnable(this)).start();
         }
     }
-    /*
+
+    public class playRunnable implements Runnable {
+        PlayBeat playBeat;
+
+        public playRunnable(PlayBeat playBeat) {this.playBeat = playBeat;}
+        //LOOP
+        @Override
+        public void run() {
+            if(isPlaying){
+                interval=toInterval(getBpm());
+                handler.postDelayed(this,interval);
+                if (mSoundPool != null && mBeatSoundId != -1) {
+                    //playBeat.updateStatus(1); //per comprobar que envia
+                    mSoundPool.play(mBeatSoundId, 1.0f /*leftVolume*/, 1.0f /*rightVolume*/, 0 /*priority*/, 0 /*loop*/, 1.0f /*rate*/);
+                }
+            } else {
+                mSoundPool.stop(mBeatSoundId);
+                handler.removeCallbacks(this);
+            }
+            //mSoundPool.release();
+            //handler.postDelayed((Runnable) getActivity(), interval);
+
+        }
+
+    }
+
+    public int getBpm(){
+        int nbpm = Float.valueOf(tempo_view.getText().toString()).intValue();
+        return nbpm;
+    }
+
+    /***
         @Override
         public void run() {
             if (isPlaying) {
@@ -140,37 +178,56 @@ public class MetroFragment extends Fragment implements View.OnClickListener {
                     mSoundPool.play(mBeatSoundId, 1, 1, 0, 0, 1);
             }
         }
-        */
+        ***/
+
 //buttons
     @Override
     public void onClick(View view) {
-        String tempo = tempo_view.getText().toString();
-        Float ftemp = Float.valueOf(tempo);
-        int temp = ftemp.intValue();
 
+        int temp = getBpm();
 
         switch(view.getId()){
             case R.id.plustempo:
                 if(temp!=tempo_selector.getMax()){
                     temp += 1;
                     tempo_view.setText(String.valueOf(temp));
+                    //modificar seekbar
+                    tempo_selector.setProgress(temp);
                 }
                 break;
             case R.id.minustempo:
-                if(temp!=0){
+                if(temp!=30){
                     temp -= 1;
                     tempo_view.setText(String.valueOf(temp));
+                    //modificar seekbar
+                    tempo_selector.setProgress(temp);
                 }
                 break;
-            case R.id.play_btn:
-                //audio
-                PlayBeat playBeat = new PlayBeat();
-                setBeatRunnable(playBeat);
-                playBeat.run();
+            case R.id.play_img:
+                isPlaying = !isPlaying;
+                //canviar el botó de play o pause
+                if(isPlaying){
+                    play_img.setImageResource(R.drawable.pause_button);
+                } else {
+                    play_img.setImageResource(R.drawable.play_button);
+                }
+                //load
+                mBeatSoundId = mSoundPool.load(getActivity(), R.raw.click, 1);
+                //fer l'execució
+                new PlayBeat(handler).play();
                 break;
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mSoundPool.release();
+        play_img.setImageResource(R.drawable.play_button);
+        Log.e("ERROR", "Crida al onStop()");
+    }
 }
+
 
 
 

@@ -61,8 +61,6 @@ public class TunerFragment extends Fragment {
         Log.e("ERROR", "Crida al onStart()");
     }
 
-
-
     // Fer que quan s'executa el onStop() s'apagui el micro!!!!!
     @Override
     public void onStop() {
@@ -150,7 +148,6 @@ public class TunerFragment extends Fragment {
 
         sp = new SoundPool(1, AudioManager.STREAM_MUSIC,1);
 
-        Toast.makeText(getActivity(), "Estem en l'on create", Toast.LENGTH_SHORT).show();
         return view;
     }
 

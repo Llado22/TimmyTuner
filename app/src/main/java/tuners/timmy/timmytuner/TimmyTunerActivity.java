@@ -64,15 +64,22 @@ public class TimmyTunerActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                if (position != 1) {
-                    tunerFragment.stopRecording();
-                    Toast.makeText(TimmyTunerActivity.this,"Apagar Micro Selected", Toast.LENGTH_SHORT).show();
-                } else {
+                if (position == 1) {
+                    metroFragment.onStop();
                     tunerFragment.startRecording();
+                    //Toast.makeText(TimmyTunerActivity.this,"Apagar Micro Selected", Toast.LENGTH_SHORT).show();
+                } else if(position == 0){
+                    metroFragment.initializeSP();
+                }
+                else {
+                    tunerFragment.stopRecording();
+                    metroFragment.onStop();
                 }
             }
         });
 
+        /*
+        //boto
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +89,7 @@ public class TimmyTunerActivity extends AppCompatActivity {
             }
         });
 
+        */
         // Demanem permisos al usuari només entrar
         askForPermission(Manifest.permission.RECORD_AUDIO, MICROPHONE_REQUEST);
     }

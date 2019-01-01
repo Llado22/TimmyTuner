@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -35,11 +36,10 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
     private Button btn_4;
     private Button btn_5;
     private Button btn_6;
-    //soundpool
-    private int idSound;
-    public SoundPool sp;
+    //View afinador
+    TunerView tunerView;
+    //media player
     private MediaPlayer mp;
-
 
     RecordingThread recordingThread = new RecordingThread(new RecordingThread.Listener() {
         @Override
@@ -67,7 +67,6 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
         Log.e("ACTION", "Crida al onStart() tuner");
     }
 
-    // Fer que quan s'executa el onStop() s'apagui el micro!!!!!
     @Override
     public void onStop() {
         super.onStop();
@@ -75,10 +74,29 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("ACTION", "Crida al onPause() tuner");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("ACTION", "Crida al onResume() tuner");
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_tuner, container, false);
+
+        //RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.container);
+        //relativeLayout.addView(new TunerView(getActivity()));
+        tunerView = (TunerView) view.findViewById(R.id.tunerView);
+        //getActivity().setContentView(tunerView);
 
         note = view.findViewById(R.id.textView);
         btn_1 = view.findViewById(R.id.btn_1);
@@ -96,8 +114,6 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
 
         return view;
     }
-
-
 
 
     @Override
@@ -174,7 +190,7 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
         else if(pitchInHz >= 185 && pitchInHz < 196) {
             sNote = "G";
         } else {
-            sNote = "?";
+            sNote = "";
         }
         try {
             //Toast.makeText(getActivity(), sNote ,Toast.LENGTH_SHORT).show();
@@ -183,10 +199,6 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
             Log.e("Error","Error en setText");
         }
 
-    }
-
-    public void rep(){
-        sp.play(idSound,1,1,1,0,0);
     }
 
     public void startRecording() {

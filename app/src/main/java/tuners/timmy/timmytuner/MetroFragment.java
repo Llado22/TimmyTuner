@@ -224,7 +224,7 @@ public class MetroFragment extends Fragment implements View.OnClickListener {
         super.onStop();
         mSoundPool.release();
         play_img.setImageResource(R.drawable.play_button);
-        Log.e("ERROR", "Crida al onStop()");
+        Log.e("ACTION", "Crida al onStop() metro");
     }
 }
 

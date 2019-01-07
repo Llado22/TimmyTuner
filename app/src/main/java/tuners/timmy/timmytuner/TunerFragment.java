@@ -23,12 +23,13 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
     private String sNote;
     boolean ContinueRecording = true;
     private AudioRecord ar = null;
-    private Button btn_record;
     public TextView note;
     private int bufferSize;
     private int SAMPLE_RATE = 4000;
     private String LOG_TAG = "Tuner";
     private String nota;
+
+    private float hsemitone = (float) Math.pow(2.0d,(float)(1d/24d));
     //buttons
     private Button btn_1;
     private Button btn_2;
@@ -49,7 +50,7 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        note.setText(sPitch);
+                        //note.setText(sPitch);
                         processPitch(pitch);
                     }
                 });
@@ -93,11 +94,7 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
 
         View view = inflater.inflate(R.layout.fragment_tuner, container, false);
 
-        //RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.container);
-        //relativeLayout.addView(new TunerView(getActivity()));
         tunerView = (TunerView) view.findViewById(R.id.tunerView);
-        //getActivity().setContentView(tunerView);
-
         note = view.findViewById(R.id.textView);
         btn_1 = view.findViewById(R.id.btn_1);
         btn_2 = view.findViewById(R.id.btn_2);
@@ -165,39 +162,103 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    //conversió nota a pitch
+    public float noteToPitch(String note){
+        String[][] notes = { {"C"}, {"Db", "C#"}, {"D"}, {"Eb", "D#"}, {"E"},
+                {"F"}, {"Gb", "F#"}, {"G"}, {"Ab", "G#"}, {"A"}, {"Bb", "A#"}, {"B"} };
+        char[] splitNote = note.toCharArray();
+        String sym = "";
+        int oct = 0;
+        float pitch = 0;
+        if (splitNote.length == 2) {
+            sym += splitNote[0];
+            oct = splitNote[1];
+        } else if (splitNote.length == 3) {
+            sym += Character.toString(splitNote[0]);
+            sym += Character.toString(splitNote[1]);
+            oct = splitNote[2];
+        }
+        float octrelation = oct / 2;
+        // Find the corresponding note in the array.
+        for (int i = 0; i < notes.length; i++) {
+            for (int j = 0; j < notes[i].length; j++) {
+                if (notes[i][j].equals(sym)) {
+                    pitch = (float) (65.41 + Math.pow(2, i / 12)) * octrelation;
+                    return pitch;
+                }
+            }
+        }
+        return -1;
+    }
+
     //conversió pitch a nota
     public void processPitch(float pitchInHz) {
-
-
-        if(pitchInHz >= 110 && pitchInHz < 123.47) {
-            sNote = "A";
+        int octave = (int) Math.floor(Math.log(pitchInHz/65.41)/Math.log(2));
+        if(octave>=1){
+            pitchInHz=pitchInHz/(octave*2);
         }
-        else if(pitchInHz >= 123.47 && pitchInHz < 130.81) {
-            sNote = "B";
-        }
-        else if(pitchInHz >= 130.81 && pitchInHz < 146.83) {
+        if(pitchInHz >= (65.41/hsemitone) && pitchInHz < (65.41*hsemitone)) {
             sNote = "C";
         }
-        else if(pitchInHz >= 146.83 && pitchInHz < 164.81) {
+        else if(pitchInHz >= (69.30/hsemitone) && pitchInHz < (69.30*hsemitone)) {
+            sNote = "C#";
+        }
+        else if(pitchInHz >= (73.42/hsemitone) && pitchInHz < (73.42*hsemitone)) {
             sNote = "D";
         }
-        else if(pitchInHz >= 164.81 && pitchInHz <= 174.61) {
+        else if(pitchInHz >= (77.78/hsemitone) && pitchInHz < (77.78*hsemitone)) {
+            sNote = "D#";
+        }
+        else if(pitchInHz >= (77.78/hsemitone) && pitchInHz < (77.78*hsemitone)) {
             sNote = "E";
         }
-        else if(pitchInHz >= 174.61 && pitchInHz < 185) {
+        else if(pitchInHz >= (87.307/hsemitone) && pitchInHz < (87.307*hsemitone)) {
             sNote = "F";
         }
-        else if(pitchInHz >= 185 && pitchInHz < 196) {
+        else if(pitchInHz >= (92.499/hsemitone) && pitchInHz < (92.499*hsemitone)) {
+            sNote = "F#";
+        }
+        else if(pitchInHz >= (97.999/hsemitone) && pitchInHz < (97.999*hsemitone)) {
             sNote = "G";
-        } else {
+        }
+        else if(pitchInHz >= (103.826/hsemitone) && pitchInHz < (103.826*hsemitone)) {
+            sNote = "G#";
+        }
+        else if(pitchInHz >= (110/hsemitone) && pitchInHz < (110*hsemitone)) {
+            sNote = "A";
+        }
+        else if(pitchInHz >= (123.47/hsemitone) && pitchInHz < (123.47*hsemitone)) {
+            sNote = "B";
+        }
+        /*
+        else if(pitchInHz >= 130.81/hsemitone && pitchInHz < 130.81*hsemitone) {
+            sNote = "C3";
+        }
+        else if(pitchInHz >= 146.83/hsemitone && pitchInHz < 146.83*hsemitone) {
+            sNote = "D3";
+        }
+        else if(pitchInHz >= 164.81 && pitchInHz <= 174.61) {
+            sNote = "E3";
+        }
+        else if(pitchInHz >= 174.61 && pitchInHz < 185) {
+            sNote = "F3";
+        }
+        else if(pitchInHz >= 185 && pitchInHz < 196) {
+            sNote = "G3";
+        }*/ else {
             sNote = "";
         }
-        try {
-            //Toast.makeText(getActivity(), sNote ,Toast.LENGTH_SHORT).show();
-            note.setText(sNote);
-        } catch (Exception e) {
-            Log.e("Error","Error en setText");
+        if(octave==0){
+            octave = 2;
+        } else {octave = octave*2;}
+
+        //Toast.makeText(getActivity(), String.valueOf(77.78/hsemitone),Toast.LENGTH_SHORT).show();
+        if(!sNote.equals("")){
+            note.setText(sNote+String.valueOf(octave));
+        } else{
+            note.setText("");
         }
+
 
     }
 

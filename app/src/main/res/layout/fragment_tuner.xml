@@ -89,7 +89,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="60dp"
         android:background="@drawable/circ_btn"
         android:text="E"
         app:layout_constraintBottom_toBottomOf="parent"

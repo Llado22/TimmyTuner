@@ -1,6 +1,7 @@
 package tuners.timmy.timmytuner;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,6 +34,8 @@ public class ChordsFragment extends Fragment {
     private String add = "maj";
     private ImageView imageView_chord;
     private String name = "cmaj";
+    private int selectedPosition=-1;
+    private int selectedPosition2=-1;
 
     // new since Glide v4
     @GlideModule
@@ -122,9 +125,11 @@ public class ChordsFragment extends Fragment {
 
     public void OnNoteClick(int position) {
         Chord item = notes.get(position);
-        //Posarlo a negreta o amb un color diferent
         chord = item.getText();
         printImage(chord, add);
+        selectedPosition=position;
+        adapter.notifyDataSetChanged();
+
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -147,9 +152,10 @@ public class ChordsFragment extends Fragment {
 
     public void OnVariationClick(int position) {
         Chord item = variations.get(position);
-        //Posarlo a negreta o amb un color diferent
         add = item.getText();
         printImage(chord, add);
+        selectedPosition2=position;
+        adapter2.notifyDataSetChanged();
     }
 
     class ViewHolder2 extends RecyclerView.ViewHolder {
@@ -183,9 +189,14 @@ public class ChordsFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
             Chord note = notes.get(position);
             holder.text.setText(note.getText());
+            if (selectedPosition==position){
+                holder.itemView.setBackgroundColor(Color.parseColor("#FF555555"));
+            } else {
+                holder.itemView.setBackgroundColor(Color.parseColor("#FF7E7E7E"));
+            }
         }
 
         @Override
@@ -209,6 +220,11 @@ public class ChordsFragment extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder2 holder, int position) {
             Chord variation = variations.get(position);
             holder.text.setText(variation.getText());
+            if (selectedPosition2==position){
+                holder.itemView.setBackgroundColor(Color.parseColor("#FF555555"));
+            } else {
+                holder.itemView.setBackgroundColor(Color.parseColor("#FF7E7E7E"));
+            }
         }
 
         @Override

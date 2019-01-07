@@ -52,6 +52,7 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
                     public void run() {
                         //note.setText(sPitch);
                         processPitch(pitch);
+                        tunerView.setPitch(pitch);
                     }
                 });
             } catch (Exception e) {
@@ -142,7 +143,7 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
                 break;
 
         }
-
+        tunerView.setSelected(noteToPitch(nota.toUpperCase()));
         try {
             int id = this.getResources().getIdentifier(nota,"raw",getActivity().getPackageName());
             if(id!=0){
@@ -170,20 +171,27 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
         String sym = "";
         int oct = 0;
         float pitch = 0;
+
         if (splitNote.length == 2) {
             sym += splitNote[0];
-            oct = splitNote[1];
+            oct = Character.getNumericValue(splitNote[1]);
         } else if (splitNote.length == 3) {
             sym += Character.toString(splitNote[0]);
             sym += Character.toString(splitNote[1]);
-            oct = splitNote[2];
+            oct = Character.getNumericValue(splitNote[2]);
         }
-        float octrelation = oct / 2;
-        // Find the corresponding note in the array.
+
+        //relació amb la 2a octava
+        int octrelation = (oct-2)*2;
+        if (oct==2){
+            octrelation = 1;
+        }
+        // Busca la nota corresponent a l'array, la pos = num de semitons de distancia amb C2 (65,41Hz)
         for (int i = 0; i < notes.length; i++) {
             for (int j = 0; j < notes[i].length; j++) {
                 if (notes[i][j].equals(sym)) {
-                    pitch = (float) (65.41 + Math.pow(2, i / 12)) * octrelation;
+                    float semitones = (float) Math.pow(2d, (double)i / 12d);
+                    pitch = ((65.41f * semitones) * (float)octrelation);
                     return pitch;
                 }
             }
@@ -209,7 +217,7 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
         else if(pitchInHz >= (77.78/hsemitone) && pitchInHz < (77.78*hsemitone)) {
             sNote = "D#";
         }
-        else if(pitchInHz >= (77.78/hsemitone) && pitchInHz < (77.78*hsemitone)) {
+        else if(pitchInHz >= (82.41/hsemitone) && pitchInHz < (82.41*hsemitone)) {
             sNote = "E";
         }
         else if(pitchInHz >= (87.307/hsemitone) && pitchInHz < (87.307*hsemitone)) {
@@ -230,35 +238,20 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
         else if(pitchInHz >= (123.47/hsemitone) && pitchInHz < (123.47*hsemitone)) {
             sNote = "B";
         }
-        /*
-        else if(pitchInHz >= 130.81/hsemitone && pitchInHz < 130.81*hsemitone) {
-            sNote = "C3";
-        }
-        else if(pitchInHz >= 146.83/hsemitone && pitchInHz < 146.83*hsemitone) {
-            sNote = "D3";
-        }
-        else if(pitchInHz >= 164.81 && pitchInHz <= 174.61) {
-            sNote = "E3";
-        }
-        else if(pitchInHz >= 174.61 && pitchInHz < 185) {
-            sNote = "F3";
-        }
-        else if(pitchInHz >= 185 && pitchInHz < 196) {
-            sNote = "G3";
-        }*/ else {
+        else {
             sNote = "";
         }
+
+        //octava a la que pertany
         if(octave==0){
             octave = 2;
         } else {octave = octave*2;}
 
-        //Toast.makeText(getActivity(), String.valueOf(77.78/hsemitone),Toast.LENGTH_SHORT).show();
         if(!sNote.equals("")){
             note.setText(sNote+String.valueOf(octave));
         } else{
             note.setText("");
         }
-
 
     }
 

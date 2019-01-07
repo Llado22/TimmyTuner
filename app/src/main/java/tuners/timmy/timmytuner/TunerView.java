@@ -9,18 +9,22 @@ import android.view.View;
 
 public class TunerView extends View {
 
-    private float selected;
-    Paint paint = new Paint();
+    private float selected = 0;
     Paint background_paintbrush;
     Paint lines_paintbrush;
-    Paint black_paintbrush_fill;
-    Paint black_paintbrush_stroke;
+    Paint onCalibrated_paintbrush_background;
     Paint white_paintbrush_text;
     private Canvas canvas;
+    Paint cursor_paintbrush;
+    private float pitch=0;
+    Paint cursorCorrect_paintbrush;
+    TunerFragment tunerFragment;
+
 
     public TunerView(Context context) {
         super(context);
         //setBackgroundResource(R.drawable)
+
     }
 
     public TunerView (Context context, AttributeSet attrs) {
@@ -40,20 +44,37 @@ public class TunerView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        float centerY = getHeight()/2;
         float centerX = getWidth()/2;
         float height = getHeight();
-
+        float width = getWidth();
 
         paintbrush();
         initialize(canvas);
+        float dif = this.selected-this.pitch;
+
+        if(dif<=5){
+            onCalibratedNote(canvas);
+        }else{
+            onNonCalibratedNote(canvas);
+        }
 
 
-        //Rect rectangle = new Rect();
-        //rectangle.set(0,0,getWidth(),getHeight());
-        //canvas.drawRect(rectangle, black_paintbrush_fill);
-        //canvas.drawText(String.valueOf(), getWidth()/2, getHeight()/2, white_paintbrush_text);
+        canvas.drawLine(centerX - dif, 0, centerX - dif, height, cursor_paintbrush);
+        invalidate();
 
+
+
+    }
+
+    private void onNonCalibratedNote(Canvas canvas) {
+        //canvas.drawPaint(background_paintbrush);
+        cursor_paintbrush.setColor(Color.RED);
+    }
+
+    private void onCalibratedNote(Canvas canvas) {
+        background_paintbrush.setColor(Color.GREEN);
+        //canvas.drawPaint(onCalibrated_paintbrush_background);
+        cursor_paintbrush.setColor(Color.GREEN);
 
     }
 
@@ -62,7 +83,6 @@ public class TunerView extends View {
         float height = getHeight();
         float width = getWidth();
 
-        //pintar background
         canvas.drawPaint(background_paintbrush);
         //linea central
         canvas.drawLine(centerX, 0, centerX, height, lines_paintbrush);
@@ -78,13 +98,21 @@ public class TunerView extends View {
     }
 
     private void paintbrush() {
-        black_paintbrush_fill = new Paint();
-        black_paintbrush_fill.setColor(Color.BLACK);
-        black_paintbrush_fill.setStyle(Paint.Style.FILL);
-        black_paintbrush_stroke = new Paint();
-        black_paintbrush_stroke.setColor(Color.BLACK);
-        black_paintbrush_stroke.setStyle(Paint.Style.STROKE);
-        black_paintbrush_stroke.setStrokeWidth(3);
+        cursor_paintbrush = new Paint();
+        cursor_paintbrush.setColor(Color.RED);
+        cursor_paintbrush.setStyle(Paint.Style.FILL_AND_STROKE);
+        cursor_paintbrush.setStrokeWidth(25);
+
+        onCalibrated_paintbrush_background = new Paint();
+        onCalibrated_paintbrush_background.setColor(Color.GREEN);
+        onCalibrated_paintbrush_background.setStyle(Paint.Style.FILL_AND_STROKE);
+        //onCalibrated_paintbrush_background.setStrokeWidth(3);
+
+        cursorCorrect_paintbrush = new Paint();
+        cursorCorrect_paintbrush.setColor(Color.GREEN);
+        cursorCorrect_paintbrush.setStyle(Paint.Style.FILL_AND_STROKE);
+        cursorCorrect_paintbrush.setStrokeWidth(25);
+
         white_paintbrush_text = new Paint();
         white_paintbrush_text.setColor(Color.WHITE);
         white_paintbrush_text.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -96,8 +124,11 @@ public class TunerView extends View {
         lines_paintbrush.setStrokeWidth(5);
     }
 
-
     //gets and sets
+    public void setPitch (float pitch){
+        this.pitch = pitch;
+    }
+
     public float getSelected() {
         return selected;
     }

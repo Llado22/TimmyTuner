@@ -30,7 +30,7 @@ public class ChordsFragment extends Fragment {
     private RecyclerView recyclerView_variation;
     private MAdapter adapter;
     private MAdapter2 adapter2;
-    private String chord = "c";
+    private String chord = "C";
     private String add = "maj";
     private ImageView imageView_chord;
     private String name = "cmaj";
@@ -97,22 +97,22 @@ public class ChordsFragment extends Fragment {
 
         switch(chord) {
             case "C":
-                if (add.equals("maj")) {
+                if (add.equals("Maj")) {
                     name = "cmaj";
                 }
                 break;
             case "C#":
-                if (add.equals("maj")) {
+                if (add.equals("Maj")) {
                     name = "csosmaj";
                 }
                 break;
             case "D":
-                if (add.equals("maj")) {
+                if (add.equals("Maj")) {
                     name = "dmaj";
                 }
                 break;
             case "G":
-                if (add.equals("maj")) {
+                if (add.equals("Maj")) {
                     name = "gmaj";
                 }
                 break;

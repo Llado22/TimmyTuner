@@ -20,8 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Pop"
-            android:theme="@style/AppTheme.CostumeTheme"
-            ></activity>
+            android:theme="@style/AppTheme.CostumeTheme"></activity>
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

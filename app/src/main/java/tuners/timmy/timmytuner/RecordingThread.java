@@ -75,6 +75,7 @@ public class RecordingThread {
             Log.e(LOG_TAG, "Audio Record can't initialize!");
             return;
         }
+
         record.startRecording();
 
         Log.v(LOG_TAG, "Start recording");
@@ -89,9 +90,16 @@ public class RecordingThread {
 
             float freq = PitchYin(audioBuffer);
 
-            // Notify waveform
+            // Notify pitch
             mListener.onAudioDataReceived(freq);
+            try {
+                mThread.sleep(30);
+            } catch (InterruptedException e) {
+                Log.e("ERROR", "En sleep");
+            }
         }
+
+
 
         record.stop();
         record.release();

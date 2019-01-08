@@ -18,13 +18,12 @@ public class TunerView extends View {
     Paint cursor_paintbrush;
     private float pitch=0;
     Paint cursorCorrect_paintbrush;
-    TunerFragment tunerFragment;
+
 
 
     public TunerView(Context context) {
         super(context);
         //setBackgroundResource(R.drawable)
-
     }
 
     public TunerView (Context context, AttributeSet attrs) {
@@ -50,33 +49,24 @@ public class TunerView extends View {
 
         paintbrush();
         initialize(canvas);
-        float dif = this.selected-this.pitch;
 
-        if(dif<=5){
-            onCalibratedNote(canvas);
+        float dif = (this.selected-this.pitch);
+        float ndif= dif/80*width;
+        if(Math.abs(dif)<=5){
+            cursor_paintbrush.setColor(Color.GREEN);
         }else{
-            onNonCalibratedNote(canvas);
+            cursor_paintbrush.setColor(Color.RED);
+        }
+        //canvas.drawText( String.valueOf(dif), centerX , 100,white_paintbrush_text);
+        if(pitch>32.70){
+            canvas.drawLine(centerX - ndif, 0, centerX - ndif, height, cursor_paintbrush);
         }
 
-
-        canvas.drawLine(centerX - dif, 0, centerX - dif, height, cursor_paintbrush);
         invalidate();
 
-
-
     }
 
-    private void onNonCalibratedNote(Canvas canvas) {
-        //canvas.drawPaint(background_paintbrush);
-        cursor_paintbrush.setColor(Color.RED);
-    }
 
-    private void onCalibratedNote(Canvas canvas) {
-        background_paintbrush.setColor(Color.GREEN);
-        //canvas.drawPaint(onCalibrated_paintbrush_background);
-        cursor_paintbrush.setColor(Color.GREEN);
-
-    }
 
     private void initialize(Canvas canvas) {
         float centerX = getWidth()/2;
@@ -87,12 +77,18 @@ public class TunerView extends View {
         //linea central
         canvas.drawLine(centerX, 0, centerX, height, lines_paintbrush);
         //segones
+        canvas.drawText("-10",centerX-(centerX/4)-40, height/8-20, white_paintbrush_text);
+        canvas.drawText("+10",centerX+(centerX/4)-40, height/8-20, white_paintbrush_text);
         canvas.drawLine(centerX-(centerX/4), height/8, centerX-(centerX/4), height-(height/8), lines_paintbrush);
         canvas.drawLine(centerX+(centerX/4), height/8, centerX+(centerX/4), height-(height/8), lines_paintbrush);
         //terceres
+        canvas.drawText("-20",centerX/2-40, height/4-20, white_paintbrush_text);
+        canvas.drawText("+20",centerX+(centerX/2)-40, height/4-20, white_paintbrush_text);
         canvas.drawLine(centerX/2, height/4, centerX/2, height-(height/4), lines_paintbrush);
         canvas.drawLine(centerX+(centerX/2), height/4, centerX+(centerX/2), height-(height/4), lines_paintbrush);
         //cuartes
+        canvas.drawText("-30",centerX/4-40, height/3-20, white_paintbrush_text);
+        canvas.drawText("+30",width-(centerX/4)-40, height/3-20, white_paintbrush_text);
         canvas.drawLine(centerX/4, height/3, centerX/4, height-(height/3), lines_paintbrush);
         canvas.drawLine(width-(centerX/4), height/3, width-(centerX/4), height-(height/3), lines_paintbrush);
     }
@@ -116,6 +112,7 @@ public class TunerView extends View {
         white_paintbrush_text = new Paint();
         white_paintbrush_text.setColor(Color.WHITE);
         white_paintbrush_text.setStyle(Paint.Style.FILL_AND_STROKE);
+        white_paintbrush_text.setTextSize(40);
         background_paintbrush = new Paint();
         background_paintbrush.setColor(Color.GRAY);
         lines_paintbrush = new Paint();

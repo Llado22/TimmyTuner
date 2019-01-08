@@ -1,5 +1,9 @@
 package tuners.timmy.timmytuner;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioRecord;
 import android.media.MediaPlayer;
@@ -37,6 +41,7 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
     private Button btn_4;
     private Button btn_5;
     private Button btn_6;
+    private boolean state = false;
     //View afinador
     TunerView tunerView;
     //media player
@@ -45,7 +50,7 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
     RecordingThread recordingThread = new RecordingThread(new RecordingThread.Listener() {
         @Override
         public void onAudioDataReceived(final float pitch) {
-            final String sPitch = String.format("%.2f", pitch);
+            //final String sPitch = String.format("%.2f", pitch);
             try {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -63,18 +68,19 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
 
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.e("ACTION", "Crida al onStart() tuner");
-    }
+    /*
+        @Override
+        public void onStart() {
+            super.onStart();
+            Log.e("ACTION", "Crida al onStart() tuner");
+        }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.e("ACTION", "Crida al onStop() tuner");
-    }
-
+        @Override
+        public void onStop() {
+            super.onStop();
+            Log.e("ACTION", "Crida al onStop() tuner");
+        }
+    */
     @Override
     public void onPause() {
         super.onPause();
@@ -109,7 +115,6 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
         btn_4.setOnClickListener(this);
         btn_5.setOnClickListener(this);
         btn_6.setOnClickListener(this);
-
         return view;
     }
 
@@ -119,7 +124,9 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
 
         switch (view.getId()){
             case R.id.btn_1:
+                //state = !state;
                 nota = btn_1.getText().toString().toLowerCase();
+                //changeColorButton(btn_1,state);
                 break;
 
             case R.id.btn_2:
@@ -163,6 +170,19 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    public void changeColorButton(Button btn, boolean state){
+        if(state){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                btn_1.setBackground(getResources().getDrawable(R.drawable.circ_btn_selected));
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                btn_1.setBackground(getResources().getDrawable(R.drawable.circ_btn));
+            }
+        }
+
+    }
+    
     //conversió nota a pitch
     public float noteToPitch(String note){
         String[][] notes = { {"C"}, {"Db", "C#"}, {"D"}, {"Eb", "D#"}, {"E"},

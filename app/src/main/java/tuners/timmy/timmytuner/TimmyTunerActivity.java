@@ -1,6 +1,7 @@
 package tuners.timmy.timmytuner;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -94,6 +95,7 @@ public class TimmyTunerActivity extends AppCompatActivity {
         askForPermission(Manifest.permission.RECORD_AUDIO, MICROPHONE_REQUEST);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -109,11 +111,13 @@ public class TimmyTunerActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id){
+            case R.id.action_about:
+                Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                break;
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

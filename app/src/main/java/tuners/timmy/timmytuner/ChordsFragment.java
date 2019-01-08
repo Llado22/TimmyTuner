@@ -31,7 +31,7 @@ public class ChordsFragment extends Fragment {
     private MAdapter adapter;
     private MAdapter2 adapter2;
     private String chord = "C";
-    private String add = "maj";
+    private String add = "Maj";
     private ImageView imageView_chord;
     private String name = "cmaj";
     private int selectedPosition=-1;

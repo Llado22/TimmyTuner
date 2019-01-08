@@ -245,7 +245,8 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
         }
         tunerView.setSelected(noteToPitch(nota.toUpperCase()));
         try {
-            int id = this.getResources().getIdentifier(nota,"raw",getActivity().getPackageName());
+            String n = nota.substring(0,1);
+            int id = this.getResources().getIdentifier(n,"raw",getActivity().getPackageName());
             if(id!=0){
                 mp = MediaPlayer.create(getActivity(), id);
                 mp.start();

@@ -6,19 +6,36 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".ChordsFragment">
 
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:foregroundGravity="bottom"
+        android:paddingTop="0dp"
+        android:src="@drawable/background3_inv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_note"
         android:layout_width="wrap_content"
-        android:layout_height="150dp"
+        android:layout_height="0dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
-        android:background="@color/colorPrimary"
+        android:layout_marginBottom="24dp"
+        android:background="@color/colorStart"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toStartOf="@+id/recyclerView_variation"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,11 +44,13 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_variation"
         android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:layout_marginTop="60dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
-        android:background="@color/colorPrimary"
+        android:layout_marginBottom="24dp"
+        android:background="@color/colorStart"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/recyclerView_note"
@@ -41,17 +60,24 @@
         android:id="@+id/imageView_chord"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginBottom="70dp"
+        android:adjustViewBounds="true"
         android:src="@color/colorPrimaryDark"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView_note" />
+        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
 
 </android.support.constraint.ConstraintLayout>

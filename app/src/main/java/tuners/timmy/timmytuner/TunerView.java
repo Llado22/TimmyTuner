@@ -55,10 +55,10 @@ public class TunerView extends View {
         if(Math.abs(dif)<=5){
             cursor_paintbrush.setColor(Color.GREEN);
         }else{
-            cursor_paintbrush.setColor(Color.RED);
+            cursor_paintbrush.setColor(Color.argb(120,120,120,120));
         }
         //canvas.drawText( String.valueOf(dif), centerX , 100,white_paintbrush_text);
-        canvas.drawLine(centerX - ndif, 0, centerX - ndif, height, cursor_paintbrush);
+        canvas.drawLine(centerX - ndif, height/20, centerX - ndif, height-(height/20), cursor_paintbrush);
 
 
         invalidate();
@@ -96,7 +96,7 @@ public class TunerView extends View {
         cursor_paintbrush = new Paint();
         cursor_paintbrush.setColor(Color.RED);
         cursor_paintbrush.setStyle(Paint.Style.FILL_AND_STROKE);
-        cursor_paintbrush.setStrokeWidth(25);
+        cursor_paintbrush.setStrokeWidth(20);
 
         onCalibrated_paintbrush_background = new Paint();
         onCalibrated_paintbrush_background.setColor(Color.GREEN);
@@ -109,11 +109,11 @@ public class TunerView extends View {
         cursorCorrect_paintbrush.setStrokeWidth(25);
 
         white_paintbrush_text = new Paint();
-        white_paintbrush_text.setColor(Color.WHITE);
+        white_paintbrush_text.setColor(Color.BLACK);
         white_paintbrush_text.setStyle(Paint.Style.FILL_AND_STROKE);
         white_paintbrush_text.setTextSize(40);
         background_paintbrush = new Paint();
-        background_paintbrush.setColor(Color.GRAY);
+        background_paintbrush.setColor(Color.WHITE);
         lines_paintbrush = new Paint();
         lines_paintbrush.setColor(Color.BLACK);
         lines_paintbrush.setStyle(Paint.Style.FILL_AND_STROKE);

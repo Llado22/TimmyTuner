@@ -58,9 +58,8 @@ public class TunerView extends View {
             cursor_paintbrush.setColor(Color.RED);
         }
         //canvas.drawText( String.valueOf(dif), centerX , 100,white_paintbrush_text);
-        if(pitch>32.70){
-            canvas.drawLine(centerX - ndif, 0, centerX - ndif, height, cursor_paintbrush);
-        }
+        canvas.drawLine(centerX - ndif, 0, centerX - ndif, height, cursor_paintbrush);
+
 
         invalidate();
 

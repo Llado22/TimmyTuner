@@ -87,7 +87,7 @@ public class ChordsFragment extends Fragment {
         recyclerView_variation.setAdapter(adapter2);
 
         Glide.with(getActivity())
-                .load("file:///android_asset/cmaj.gif")
+                .load("file:///android_asset/cmaj.PNG")
                 .into(imageView_chord);
 
         return view;
@@ -96,30 +96,101 @@ public class ChordsFragment extends Fragment {
     public void printImage(String chord, String add) {
 
         switch(chord) {
-            case "C":
-                if (add.equals("Maj")) {
-                    name = "cmaj";
+            case "A":
+                switch(add) {
+                    case "Maj":
+                        name = "amaj";
+                        break;
+                    case "Min":
+                        name = "amin";
+                        break;
+                    case "7":
+                        name = "a7";
+                        break;
                 }
                 break;
-            case "C#":
-                if (add.equals("Maj")) {
-                    name = "csosmaj";
+            case "B":
+                switch(add) {
+                    case "Maj":
+                        name = "bmaj";
+                        break;
+                    case "Min":
+                        name = "bmin";
+                        break;
+                    case "7":
+                        name = "b7";
+                        break;
+                }
+                break;
+            case "C":
+                switch(add) {
+                    case "Maj":
+                        name = "cmaj";
+                        break;
+                    case "Min":
+                        name = "cmin";
+                        break;
+                    case "7":
+                        name = "c7";
+                        break;
                 }
                 break;
             case "D":
-                if (add.equals("Maj")) {
-                    name = "dmaj";
+                switch(add) {
+                    case "Maj":
+                        name = "dmaj";
+                        break;
+                    case "Min":
+                        name = "dmin";
+                        break;
+                    case "7":
+                        name = "d7";
+                        break;
+                }
+                break;
+            case "E":
+                switch(add) {
+                    case "Maj":
+                        name = "emaj";
+                        break;
+                    case "Min":
+                        name = "emin";
+                        break;
+                    case "7":
+                        name = "e7";
+                        break;
+                }
+                break;
+            case "F":
+                switch(add) {
+                    case "Maj":
+                        name = "fmaj";
+                        break;
+                    case "Min":
+                        name = "fmin";
+                        break;
+                    case "7":
+                        name = "f7";
+                        break;
                 }
                 break;
             case "G":
-                if (add.equals("Maj")) {
-                    name = "gmaj";
+                switch(add) {
+                    case "Maj":
+                        name = "gmaj";
+                        break;
+                    case "Min":
+                        name = "gmin";
+                        break;
+                    case "7":
+                        name = "g7";
+                        break;
                 }
                 break;
         }
 
         Glide.with(getActivity())
-                .load("file:///android_asset/" + name + ".gif")
+                .load("file:///android_asset/" + name + ".PNG")
                 .into(imageView_chord);
     }
 

@@ -16,7 +16,7 @@
         android:adjustViewBounds="true"
         android:foregroundGravity="bottom"
         android:paddingTop="0dp"
-        android:src="@drawable/background3_def"
+        android:src="@drawable/background3_def_gris"
         android:tint="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

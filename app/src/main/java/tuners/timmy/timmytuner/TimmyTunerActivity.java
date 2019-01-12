@@ -49,7 +49,7 @@ public class TimmyTunerActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        mViewPager.setCurrentItem(1);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -60,7 +60,6 @@ public class TimmyTunerActivity extends AppCompatActivity {
         tunerFragment = new TunerFragment();
         chordsFragment = new ChordsFragment();
         metroFragment = new MetroFragment();
-
         // Millor posar el Listener des d'aquí ja
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override

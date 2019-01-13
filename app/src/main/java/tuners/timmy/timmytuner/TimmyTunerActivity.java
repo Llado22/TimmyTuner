@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -156,8 +157,7 @@ public class TimmyTunerActivity extends AppCompatActivity {
                         requestCode);
             }
         } else {
-            Toast.makeText(this, "" + permission + "is already granted.",
-                    Toast.LENGTH_SHORT).show();
+            Log.e("ACTION", "" + permission + "is already granted.");
         }
 
 

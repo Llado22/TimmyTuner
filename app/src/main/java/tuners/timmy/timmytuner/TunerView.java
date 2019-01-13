@@ -16,6 +16,7 @@ public class TunerView extends View {
     Paint white_paintbrush_text;
     private Canvas canvas;
     Paint cursor_paintbrush;
+    Paint red_paintbrush_text;
     private float pitch=0;
     Paint cursorCorrect_paintbrush;
 
@@ -52,19 +53,21 @@ public class TunerView extends View {
 
         float dif = (this.selected-this.pitch);
         float ndif= dif/80*width;
-        if(Math.abs(dif)<=5){
+        if(Math.abs(dif)<=10){
             cursor_paintbrush.setColor(Color.GREEN);
-        }else{
+        }else if(dif>30){
+            canvas.drawText("HIGH",width-(centerX/10), height-(height/10), red_paintbrush_text);
+        } else if(dif<-30){
+            canvas.drawText("LOW",centerX/10, height-(height/10), red_paintbrush_text);
+        } else{
             cursor_paintbrush.setColor(Color.argb(120,120,120,120));
         }
         //canvas.drawText( String.valueOf(dif), centerX , 100,white_paintbrush_text);
         canvas.drawLine(centerX - ndif, height/20, centerX - ndif, height-(height/20), cursor_paintbrush);
 
-
         invalidate();
 
     }
-
 
 
     private void initialize(Canvas canvas) {
@@ -112,6 +115,12 @@ public class TunerView extends View {
         white_paintbrush_text.setColor(Color.BLACK);
         white_paintbrush_text.setStyle(Paint.Style.FILL_AND_STROKE);
         white_paintbrush_text.setTextSize(40);
+
+        red_paintbrush_text = new Paint();
+        red_paintbrush_text.setColor(Color.RED);
+        red_paintbrush_text.setStyle(Paint.Style.FILL_AND_STROKE);
+        red_paintbrush_text.setTextSize(60);
+
         background_paintbrush = new Paint();
         background_paintbrush.setColor(Color.WHITE);
         lines_paintbrush = new Paint();

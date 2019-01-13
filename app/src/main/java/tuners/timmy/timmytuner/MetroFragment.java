@@ -74,11 +74,12 @@ public class MetroFragment extends Fragment implements View.OnClickListener {
         tempo_view.setText(String.valueOf(bpm));
         tempo_selector.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChangedValue = 0;
+            int min = 30;
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                progressChangedValue = progress;
-                bpm = progress;
+                progressChangedValue = progress+min;
+                bpm = progressChangedValue;
                 interval = toInterval(bpm);
                 String sprogressChangedValue = String.valueOf(progressChangedValue);
                 tempo_view.setText(sprogressChangedValue);
@@ -93,7 +94,6 @@ public class MetroFragment extends Fragment implements View.OnClickListener {
                 // Toast.makeText(getActivity(), "Seek bar progress is :" + progressChangedValue,Toast.LENGTH_SHORT).show();
             }
         });
-
         return view;
     }
 

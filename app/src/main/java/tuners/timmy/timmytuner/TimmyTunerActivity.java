@@ -61,6 +61,7 @@ public class TimmyTunerActivity extends AppCompatActivity {
         tunerFragment = new TunerFragment();
         chordsFragment = new ChordsFragment();
         metroFragment = new MetroFragment();
+        tunerFragment.startRecording();
         // Millor posar el Listener des d'aquí ja
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override

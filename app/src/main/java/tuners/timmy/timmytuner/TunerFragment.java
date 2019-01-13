@@ -59,7 +59,7 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //note.setText(sPitch);
+                        //note.setText(String.valueOf(pitch));
                         processPitch(pitch);
                         tunerView.setPitch(pitch);
                     }
@@ -70,32 +70,6 @@ public class TunerFragment extends Fragment implements View.OnClickListener {
         }
     });
 
-
-
-    /*
-        @Override
-        public void onStart() {
-            super.onStart();
-            Log.e("ACTION", "Crida al onStart() tuner");
-        }
-
-        @Override
-        public void onStop() {
-            super.onStop();
-            Log.e("ACTION", "Crida al onStop() tuner");
-        }
-    */
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.e("ACTION", "Crida al onPause() tuner");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("ACTION", "Crida al onResume() tuner");
-    }
 
 
     @Override
